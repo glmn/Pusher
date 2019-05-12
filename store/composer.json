@@ -1,0 +1,8 @@
+{
+    "require": {
+        "geoip2/geoip2": "~2.0",
+        "yidas/client-ip": "^1.0",
+        "worm/getclientiplib": "^1.0",
+        "whichbrowser/parser": "^2.0"
+    }
+}
