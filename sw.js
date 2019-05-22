@@ -1,4 +1,11 @@
-var url
+/**
+ * * Not ready for production yet
+ * TODO: Make request to server when notifications was received
+ */
+
+
+// ? Should i use this variable name for URL?
+var link
 
 self.addEventListener('push', function (event) {
   if (!(self.Notification && self.Notification.permission === 'granted')) {
@@ -7,6 +14,10 @@ self.addEventListener('push', function (event) {
 
   const sendNotification = (data) => {
     console.log('data', data)
+
+    // TODO: Ping client
+    // if(data.ping === true)
+    
     const payload = {
       title: data.title,
       body: data.body,
@@ -28,9 +39,27 @@ self.addEventListener('push', function (event) {
     event.waitUntil(promiseChain)
   }
 
+  const sendPongOnPing = (data) => {
+    console.log(data)
+
+    if(!isNaN(data.clientId)){ return }
+    
+    const promiseChain = fetch(link)
+      .then(res => {
+        console.log(res)
+      })
+
+    event.waitUntil(promiseChain)
+  }
+  
   const data = event.data.json()
-  url = data.url
-  event.waitUntil(sendNotification(data))
+  link = data.url
+
+  if(data.ping === true){
+    event.waitUntil(sendPongOnPing(data))
+  } else {
+    event.waitUntil(sendNotification(data))
+  }
 })
 
 self.addEventListener('notificationclick', function (event) {
@@ -41,13 +70,13 @@ self.addEventListener('notificationclick', function (event) {
       for (var i = 0; i < windowClients.length; i++) {
         var client = windowClients[i]
         // If so, just focus it.
-        if (client.url === url && 'focus' in client) {
+        if (client.url === link && 'focus' in client) {
           return client.focus()
         }
       }
       // If not, then open the target URL in a new window/tab.
       if (clients.openWindow) {
-        return clients.openWindow(url)
+        return clients.openWindow(link)
       }
     })
   )
