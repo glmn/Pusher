@@ -15,8 +15,7 @@ self.addEventListener('push', function (event) {
   const sendNotification = (data) => {
     console.log('data', data)
 
-    // TODO: Ping client
-    // if(data.ping === true)
+    
     
     const payload = {
       title: data.title,
@@ -39,6 +38,10 @@ self.addEventListener('push', function (event) {
     event.waitUntil(promiseChain)
   }
 
+  /**
+   * Response on ping request
+   * @param {Object} data 
+   */
   const sendPongOnPing = (data) => {
     console.log(data)
 
